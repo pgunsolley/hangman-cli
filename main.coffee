@@ -17,11 +17,13 @@ takeWordCount = =>
     res
 
 wordCount = await takeWordCount()
+score = 0
 
 for await word from words wordCount
-    print "\n\n\n\n\n\n\n"
     definitions = await getDefinitions word
+    wordPoints = word.length + if definitions.length == 0 then 20 else 5
     progress = initialize word
+    print "\n\n\n\n\n\n"
     print progress()
     guesses = 0
     while guesses < hangman.length
@@ -34,6 +36,8 @@ for await word from words wordCount
             guesses = guesses + 1
             continue
         print "Correct!"
+        score += wordPoints
         break
+    print "Score: #{score}"
     print "The word is #{word}"
 print "Game over!"
