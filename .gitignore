@@ -1,2 +1,3 @@
 # For if I add dependencies
 node_modules
+*.js

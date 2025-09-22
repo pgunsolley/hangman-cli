@@ -4,26 +4,27 @@
 { getDefinitions } = require "./dictionary"
 { initialize } = require "./progress"
 
-MAX_WORDS = 10
+MAX_WORDS = 20
+WITH_DEFINITIONS_BONUS = 5
+NO_DEFINITIONS_BONUS = 25
 
-takeWordCount = =>
-    res = await inputNum "How many words do you want to attempt?"
+wordCount = await do =>
+    res = await inputNum "How many words do you want to attempt? Enter 0 to play indefinitely (use ctrl+c to exit)"
     if res > MAX_WORDS
         print "The maximum is #{MAX_WORDS}.. using #{MAX_WORDS}"
         return MAX_WORDS
     if res == 0
-        print "Defaulting to 1 word"
-        return 1
-    res
+        print "Playing until exit (ctrl+c)"
+    Infinity
 
-wordCount = await takeWordCount()
 score = 0
 
 for await word from words wordCount
     definitions = await getDefinitions word
-    wordPoints = word.length + if definitions.length == 0 then 20 else 5
+    isNoDefinitionBonus = definitions.includes "No definitions found"
+    wordPoints = word.length + if isNoDefinitionBonus then NO_DEFINITIONS_BONUS else WITH_DEFINITIONS_BONUS
     progress = initialize word
-    print "\n\n\n\n\n\n"
+    print "New word for #{wordPoints} points"
     print progress()
     guesses = 0
     while guesses < hangman.length

@@ -4,7 +4,7 @@ initialize = (word) =>
         _state = ""
         for char, i in word
             _state += if char == guess[i] then char else state[i]
-        "Progress:\n" + (state = _state)
+        (state = _state)
             .split ""
             .join " "
 
