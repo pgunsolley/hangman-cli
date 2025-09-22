@@ -4,17 +4,16 @@
 { getDefinitions } = require "./dictionary"
 { initialize } = require "./progress"
 
-MAX_WORDS = 20
 WITH_DEFINITIONS_BONUS = 5
 NO_DEFINITIONS_BONUS = 25
 
 wordCount = await do =>
-    res = await inputNum "How many words do you want to attempt? Enter 0 to play indefinitely (use ctrl+c to exit)"
-    if res > MAX_WORDS
-        print "The maximum is #{MAX_WORDS}.. using #{MAX_WORDS}"
-        return MAX_WORDS
+    res = await inputNum "How many words do you want to attempt? Press enter or enter 0 to play until exit (use ctrl+c to exit)"
+    if res > 0
+        print "Playing #{res} words"
+        return res
     if res == 0
-        print "Playing until exit (ctrl+c)"
+        print "Playing until exit"
     Infinity
 
 score = 0
