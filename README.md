@@ -7,6 +7,7 @@ It needs tests, it was written quickly, and it works.
 
 This is not a technical demonstration.
 This is not a skill demonstration.
+It is purposefully somewhat smelly in design.
 It's just a stupid hangman game.
 
 ## Dependencies

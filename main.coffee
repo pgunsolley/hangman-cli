@@ -3,9 +3,7 @@
 { words } = require "./words"
 { getDefinitions } = require "./dictionary"
 { initialize } = require "./progress"
-
-WITH_DEFINITIONS_BONUS = 5
-NO_DEFINITIONS_BONUS = 25
+{ score } = require "./score"
 
 wordCount = await do =>
     res = await inputNum "How many words do you want to attempt? Press enter or enter 0 to play until exit (use ctrl+c to exit)"
@@ -16,19 +14,19 @@ wordCount = await do =>
         print "Playing until exit"
     Infinity
 
-score = 0
+totalScore = 0
 
 for await word from words wordCount
     definitions = await getDefinitions word
-    isNoDefinitionBonus = definitions.includes "No definitions found"
-    wordPoints = word.length + if isNoDefinitionBonus then NO_DEFINITIONS_BONUS else WITH_DEFINITIONS_BONUS
     progress = initialize word
-    print "New word for #{wordPoints} points"
+    scoreWord = score totalScore
+    scoreGuess = scoreWord word, definitions
     print progress()
     guesses = 0
     while guesses < hangman.length
         print definitions
         guess = (await input "Guess the word").trim().toLowerCase()
+        totalScore = scoreGuess guess
         if guess isnt word
             print hangman[guesses]
             print progress guess
@@ -36,8 +34,7 @@ for await word from words wordCount
             guesses = guesses + 1
             continue
         print "Correct!"
-        score += wordPoints
         break
-    print "Score: #{score}"
+    print "Score: #{totalScore}"
     print "The word is #{word}"
 print "Game over!"
